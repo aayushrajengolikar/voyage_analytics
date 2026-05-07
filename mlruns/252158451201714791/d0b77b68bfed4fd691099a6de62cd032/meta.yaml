@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/voyage_analytics/mlruns/252158451201714791/d0b77b68bfed4fd691099a6de62cd032/artifacts
+end_time: 1778074566307
+entry_point_name: ''
+experiment_id: '252158451201714791'
+lifecycle_stage: active
+run_id: d0b77b68bfed4fd691099a6de62cd032
+run_name: Decision_Tree
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778074557801
+status: 3
+tags: []
+user_id: aayus

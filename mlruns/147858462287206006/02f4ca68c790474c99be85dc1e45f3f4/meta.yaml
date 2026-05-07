@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/voyage_analytics/mlruns/147858462287206006/02f4ca68c790474c99be85dc1e45f3f4/artifacts
+end_time: 1778074787261
+entry_point_name: ''
+experiment_id: '147858462287206006'
+lifecycle_stage: active
+run_id: 02f4ca68c790474c99be85dc1e45f3f4
+run_name: Flight_Decision_Tree
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778074776594
+status: 3
+tags: []
+user_id: aayus

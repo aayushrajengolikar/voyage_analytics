@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/voyage_analytics/mlruns/252158451201714791/bf6ccc3722c244249f7b3398f9fff5c3/artifacts
+end_time: 1778074534576
+entry_point_name: ''
+experiment_id: '252158451201714791'
+lifecycle_stage: active
+run_id: bf6ccc3722c244249f7b3398f9fff5c3
+run_name: Logistic_Regression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778074526308
+status: 3
+tags: []
+user_id: aayus

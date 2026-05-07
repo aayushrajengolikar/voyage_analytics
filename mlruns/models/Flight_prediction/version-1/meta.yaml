@@ -1,0 +1,16 @@
+creation_timestamp: 1778077491274
+current_stage: None
+deployment_job_state: null
+description: ''
+last_updated_timestamp: 1778077491274
+model_id: m-50947b5604664881abd08f13cb6aba30
+name: Flight_prediction
+run_id: f004768a09a54a56a13deba1aac0ddcf
+run_link: ''
+source: models:/m-50947b5604664881abd08f13cb6aba30
+status: READY
+status_message: null
+storage_location: file:///D:/voyage_analytics/mlruns/147858462287206006/models/m-50947b5604664881abd08f13cb6aba30/artifacts
+user_id: null
+version: 1
+workspace: default

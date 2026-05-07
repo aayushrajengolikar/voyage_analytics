@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/voyage_analytics/mlruns/158673596137790911/c8ff25d22f6049fbb262cf0794c16600/artifacts
+end_time: 1778075206503
+entry_point_name: ''
+experiment_id: '158673596137790911'
+lifecycle_stage: active
+run_id: c8ff25d22f6049fbb262cf0794c16600
+run_name: User_Based_CF
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778075206442
+status: 3
+tags: []
+user_id: aayus

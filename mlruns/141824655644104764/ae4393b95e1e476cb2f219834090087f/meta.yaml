@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/voyage_analytics/mlruns/141824655644104764/ae4393b95e1e476cb2f219834090087f/artifacts
+end_time: 1778075148952
+entry_point_name: ''
+experiment_id: '141824655644104764'
+lifecycle_stage: active
+run_id: ae4393b95e1e476cb2f219834090087f
+run_name: Churn_Decision_Tree
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778075141321
+status: 3
+tags: []
+user_id: aayus

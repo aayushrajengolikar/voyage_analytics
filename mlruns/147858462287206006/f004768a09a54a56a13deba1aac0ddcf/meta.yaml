@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/voyage_analytics/mlruns/147858462287206006/f004768a09a54a56a13deba1aac0ddcf/artifacts
+end_time: 1778075097979
+entry_point_name: ''
+experiment_id: '147858462287206006'
+lifecycle_stage: active
+run_id: f004768a09a54a56a13deba1aac0ddcf
+run_name: Flight_Random_Forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778074804822
+status: 3
+tags: []
+user_id: aayus

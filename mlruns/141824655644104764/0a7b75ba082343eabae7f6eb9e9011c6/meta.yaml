@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/voyage_analytics/mlruns/141824655644104764/0a7b75ba082343eabae7f6eb9e9011c6/artifacts
+end_time: 1778075141297
+entry_point_name: ''
+experiment_id: '141824655644104764'
+lifecycle_stage: active
+run_id: 0a7b75ba082343eabae7f6eb9e9011c6
+run_name: Churn_Logistic_Regression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778075134020
+status: 3
+tags: []
+user_id: aayus

@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/voyage_analytics/mlruns/141824655644104764/15c20707bf0d4b57855078c14ff5134f/artifacts
+end_time: 1778075166006
+entry_point_name: ''
+experiment_id: '141824655644104764'
+lifecycle_stage: active
+run_id: 15c20707bf0d4b57855078c14ff5134f
+run_name: Churn_Random_Forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778075157331
+status: 3
+tags: []
+user_id: aayus
