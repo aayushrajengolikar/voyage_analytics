@@ -24,6 +24,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r ${{ github.workspace }}/requirements.txt
 
+    - name: Set MLflow safe mode (CI fix)
+      run: |
+        mkdir -p mlruns
+        export MLFLOW_TRACKING_URI=file:./mlruns
+
     - name: Test backend import
       working-directory: app
       run: |
