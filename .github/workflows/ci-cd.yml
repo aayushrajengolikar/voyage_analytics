@@ -3,7 +3,6 @@ name: Voyage Analytics CI/CD
 on:
   push:
     branches: [ master ]
-
   pull_request:
     branches: [ master ]
 
@@ -12,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -26,25 +24,25 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest httpx flake8
+          pip install pytest httpx flake8 
 
       - name: Lint Code
         run: |
-          flake8 app/ --count --select=E9,F63,F7,F82 --show-source --statistics || true
+          flake8 app/ frontend/ --count --select=E9,F63,F7,F82 --show-source --statistics
 
       - name: Run Backend Tests
-        # Adding '|| true' ensures the pipeline continues to Deployment
+        # The '|| true' ensures that even with 0 tests, the pipeline continues
         run: |
           pytest app/ || true
 
       - name: Trigger Render Deployment
+        # Ensure this matches your branch name (master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         env:
           RENDER_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
           if [ -z "$RENDER_HOOK" ]; then
-            echo "Error: RENDER_DEPLOY_HOOK secret is not set."
+            echo "Error: RENDER_DEPLOY_HOOK secret is not set in GitHub Settings."
             exit 1
           fi
-
           curl -X POST "$RENDER_HOOK"
