@@ -1,45 +1,36 @@
-name: Voyage Analytics CI/CD
+backend-ci:
+  runs-on: ubuntu-latest
 
-on:
-  push:
-    branches:
-      - master
+  steps:
+  - name: Checkout code
+    uses: actions/checkout@v4
 
-jobs:
+  - name: Set up Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: "3.10"
 
-  backend-ci:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
-
-    - name: Install backend dependencies
-      run: |
+  - name: Install backend dependencies
+    run: |
         python -m pip install --upgrade pip
         pip install -r ${{ github.workspace }}/requirements.txt
 
-    - name: Prepare CI environment (MLflow safe mode)
-  run: |
-    mkdir -p mlruns
-    export MLFLOW_TRACKING_URI=file:./mlruns
-    export MLFLOW_REGISTRY_URI=file:./mlruns
-    export MLFLOW_EXPERIMENT_NAME=ci-test
-    export MLFLOW_RUN_ID=ci-run
+  - name: Create MLflow safe environment
+    run: |
+      mkdir -p mlruns
 
-    - name: Patch MLflow behavior for CI
-  run: |
-    python -c "import os; os.environ['MLFLOW_TRACKING_URI']='file:./mlruns'"
+  - name: Set MLflow environment variables
+    run: |
+      echo "MLFLOW_TRACKING_URI=file:./mlruns" >> $GITHUB_ENV
+      echo "MLFLOW_REGISTRY_URI=file:./mlruns" >> $GITHUB_ENV
+      echo "MLFLOW_EXPERIMENT_NAME=ci-test" >> $GITHUB_ENV
 
-    - name: Test backend import
-  working-directory: app
-  run: |
-    PYTHONPATH=.. python -c "import main"
+  - name: Test backend import
+    working-directory: app
+    run: |
+      PYTHONPATH=.. python -c "import main"
+
+
 
   frontend-ci:
     runs-on: ubuntu-latest
