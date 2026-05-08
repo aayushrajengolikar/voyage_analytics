@@ -27,7 +27,7 @@ jobs:
     - name: Test backend import
       working-directory: app
       run: |
-        python -c "import main"
+        PYTHONPATH=.. python -c "import main"
 
   frontend-ci:
     runs-on: ubuntu-latest
