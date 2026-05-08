@@ -1,9 +1,13 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import os
 
 # Load dataset once
-df_travel = pd.read_csv("app/data/hotel.csv")
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # app/
+file_path = os.path.join(BASE_DIR, "data", "hotel.csv")
+
+df_travel = pd.read_csv(file_path)
 
 # Create features
 df_travel['features'] = (
