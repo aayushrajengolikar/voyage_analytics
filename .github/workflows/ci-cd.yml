@@ -24,39 +24,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r ${{ github.workspace }}/requirements.txt
 
-    - name: Create MLflow safe folder (not strictly required now)
+    - name: Set correct MLflow path
       run: |
-        mkdir -p mlruns
+        echo "MLFLOW_TRACKING_URI=file:${{ github.workspace }}/mlruns" >> $GITHUB_ENV
+        echo "MLFLOW_REGISTRY_URI=file:${{ github.workspace }}/mlruns" >> $GITHUB_ENV
+        echo "MLFLOW_EXPERIMENT_NAME=ci-test" >> $GITHUB_ENV
 
-    - name: Run backend safely (MLflow fully bypassed)
-      working-directory: app
+    - name: Verify mlruns exists
       run: |
-        PYTHONPATH=.. python -c "
-import sys
-import types
+        ls -R ${{ github.workspace }}/mlruns || echo "mlruns folder not found"
 
-# -----------------------------
-# MOCK MLflow BEFORE importing app
-# -----------------------------
-fake_mlflow = types.ModuleType('mlflow')
-fake_pyfunc = types.ModuleType('mlflow.pyfunc')
-
-def fake_load_model(*args, **kwargs):
-    print('MLflow load_model skipped in CI')
-    return None
-
-fake_pyfunc.load_model = fake_load_model
-fake_mlflow.pyfunc = fake_pyfunc
-
-sys.modules['mlflow'] = fake_mlflow
-sys.modules['mlflow.pyfunc'] = fake_pyfunc
-
-# -----------------------------
-# Now safely import your app
-# -----------------------------
-import main
-print('Backend import successful')
-"
+    - name: Test backend import
+      working-directory: ${{ github.workspace }}
+      run: |
+        export PYTHONPATH=${{ github.workspace }}
+        python -c "import app.main"
 
   frontend-ci:
     runs-on: ubuntu-latest
@@ -76,6 +58,6 @@ print('Backend import successful')
         pip install streamlit
 
     - name: Test Streamlit app import
-      working-directory: frontend
+      working-directory: ${{ github.workspace }}
       run: |
-        python -c "import streamlit_app; print('Frontend import successful')"
+        python -c "import streamlit_app"
