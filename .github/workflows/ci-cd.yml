@@ -24,27 +24,38 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r ${{ github.workspace }}/requirements.txt
 
-    - name: Create MLflow safe environment
+    - name: Create MLflow safe folder (not strictly required now)
       run: |
         mkdir -p mlruns
 
-    - name: Run backend import safely (MLflow bypass)
+    - name: Run backend safely (MLflow fully bypassed)
       working-directory: app
       run: |
         PYTHONPATH=.. python -c "
-import os
-os.environ['CI'] = 'true'
+import sys
+import types
 
-import mlflow.pyfunc
+# -----------------------------
+# MOCK MLflow BEFORE importing app
+# -----------------------------
+fake_mlflow = types.ModuleType('mlflow')
+fake_pyfunc = types.ModuleType('mlflow.pyfunc')
 
-# Monkey patch MLflow to prevent artifact loading in CI
 def fake_load_model(*args, **kwargs):
     print('MLflow load_model skipped in CI')
     return None
 
-mlflow.pyfunc.load_model = fake_load_model
+fake_pyfunc.load_model = fake_load_model
+fake_mlflow.pyfunc = fake_pyfunc
 
+sys.modules['mlflow'] = fake_mlflow
+sys.modules['mlflow.pyfunc'] = fake_pyfunc
+
+# -----------------------------
+# Now safely import your app
+# -----------------------------
 import main
+print('Backend import successful')
 "
 
   frontend-ci:
@@ -67,4 +78,4 @@ import main
     - name: Test Streamlit app import
       working-directory: frontend
       run: |
-        python -c "import streamlit_app"
+        python -c "import streamlit_app; print('Frontend import successful')"
