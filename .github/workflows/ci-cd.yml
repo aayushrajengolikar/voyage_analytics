@@ -28,15 +28,24 @@ jobs:
       run: |
         mkdir -p mlruns
 
-    - name: Disable MLflow model loading in CI
-      run: |
-        echo "CI=true" >> $GITHUB_ENV
-
-    - name: Test backend import
+    - name: Run backend import safely (MLflow bypass)
       working-directory: app
       run: |
-        PYTHONPATH=.. CI=true python -c "import main"
+        PYTHONPATH=.. python -c "
+import os
+os.environ['CI'] = 'true'
 
+import mlflow.pyfunc
+
+# Monkey patch MLflow to prevent artifact loading in CI
+def fake_load_model(*args, **kwargs):
+    print('MLflow load_model skipped in CI')
+    return None
+
+mlflow.pyfunc.load_model = fake_load_model
+
+import main
+"
 
   frontend-ci:
     runs-on: ubuntu-latest
