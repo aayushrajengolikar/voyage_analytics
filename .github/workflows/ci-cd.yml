@@ -28,16 +28,14 @@ jobs:
       run: |
         mkdir -p mlruns
 
-    - name: Set MLflow environment variables
+    - name: Disable MLflow model loading in CI
       run: |
-        echo "MLFLOW_TRACKING_URI=file:./mlruns" >> $GITHUB_ENV
-        echo "MLFLOW_REGISTRY_URI=file:./mlruns" >> $GITHUB_ENV
-        echo "MLFLOW_EXPERIMENT_NAME=ci-test" >> $GITHUB_ENV
+        echo "CI=true" >> $GITHUB_ENV
 
     - name: Test backend import
       working-directory: app
       run: |
-        PYTHONPATH=.. python -c "import main"
+        PYTHONPATH=.. CI=true python -c "import main"
 
 
   frontend-ci:
