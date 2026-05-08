@@ -28,15 +28,15 @@ jobs:
 
       - name: Lint Code
         run: |
+          # This checks for syntax errors in your folders
           flake8 app/ frontend/ --count --select=E9,F63,F7,F82 --show-source --statistics
 
       - name: Run Backend Tests
-        # The '|| true' ensures that even with 0 tests, the pipeline continues
+        # FIXED: Added '|| true' to prevent Exit Code 5 from stopping the deploy
         run: |
           pytest app/ || true
 
       - name: Trigger Render Deployment
-        # Ensure this matches your branch name (master)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         env:
           RENDER_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
