@@ -155,6 +155,7 @@ class GenderInput(BaseModel):
     name: str
     age: int
 
+
 @app.post("/predict/gender")
 def predict_gender(data: GenderInput):
     try:
