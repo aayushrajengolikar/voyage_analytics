@@ -2,60 +2,48 @@ name: Voyage Analytics CI/CD
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-
-  backend-ci:
-  runs-on: ubuntu-latest
-
-  steps:
-  - uses: actions/checkout@v4
-
-  - uses: actions/setup-python@v5
-    with:
-      python-version: "3.10"
-
-  - run: pip install -r requirements.txt
-
-  - name: Set env
-    run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
-
-  - name: Test backend
-    run: python -c "import app.main; print('OK')"
-import app.main
-print('Backend import successful')
-" || echo "Backend imported with model load skipped/failure"
-
-  frontend-ci:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
 
-    - name: Install frontend dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install streamlit
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest httpx flake8 
 
-    - name: Find Streamlit file
-      run: |
-        find . -name "*streamlit*.py"
+      - name: Lint Code
+        run: |
+          flake8 app/ frontend/ --count --select=E9,F63,F7,F82 --show-source --statistics
 
-    - name: Run Streamlit import safely
-      run: |
-        python -c "
-try:
-    import streamlit_app
-except ModuleNotFoundError:
-    import sys
-    sys.path.append('.')
-    print('Streamlit file not found at root, skipping import test')
-"
+      - name: Run Backend Tests
+        run: |
+          # If you don't have tests yet, this step might fail. 
+          # You can add '|| true' at the end to force it to pass for now.
+          pytest app/
+
+      - name: Trigger Render Deployment
+        # FIXED: Changed 'main' to 'master' below
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          RENDER_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$RENDER_HOOK" ]; then
+            echo "Error: RENDER_DEPLOY_HOOK secret is not set in GitHub Settings."
+            exit 1
+          fi
+          curl -X POST "$RENDER_HOOK"
