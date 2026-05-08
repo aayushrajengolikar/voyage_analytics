@@ -24,15 +24,22 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r ${{ github.workspace }}/requirements.txt
 
-    - name: Set MLflow safe mode (CI fix)
-      run: |
-        mkdir -p mlruns
-        export MLFLOW_TRACKING_URI=file:./mlruns
+    - name: Prepare CI environment (MLflow safe mode)
+  run: |
+    mkdir -p mlruns
+    export MLFLOW_TRACKING_URI=file:./mlruns
+    export MLFLOW_REGISTRY_URI=file:./mlruns
+    export MLFLOW_EXPERIMENT_NAME=ci-test
+    export MLFLOW_RUN_ID=ci-run
+
+    - name: Patch MLflow behavior for CI
+  run: |
+    python -c "import os; os.environ['MLFLOW_TRACKING_URI']='file:./mlruns'"
 
     - name: Test backend import
-      working-directory: app
-      run: |
-        PYTHONPATH=.. python -c "import main"
+  working-directory: app
+  run: |
+    PYTHONPATH=.. python -c "import main"
 
   frontend-ci:
     runs-on: ubuntu-latest
