@@ -1,13 +1,22 @@
 import streamlit as st
 import requests
 
-st.title("🏨 Hotel Recommendation")
+st.header("Recommendation System")
 
-index = st.number_input("Enter Row Index (0,1,2...)", value=0)
+
+index = st.number_input("Movie/Product Index", value=0)
+API_URL = f"https://voyage-analytics-xdw8.onrender.com/recommend/{index}"
 
 if st.button("Get Recommendations"):
-    response = requests.get(
-        f"http://127.0.0.1:8000/recommend/{index}"
-    )
 
-    st.write(response.json())
+    data = {
+            "index": index
+        }
+
+    response = requests.get(API_URL, json=data)
+
+    if response.status_code == 200:
+            st.success("Recommendation Generated")
+            st.write(response.json())
+    else:
+            st.error(response.text)

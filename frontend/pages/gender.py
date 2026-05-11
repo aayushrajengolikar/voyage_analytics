@@ -1,22 +1,31 @@
 import streamlit as st
 import requests
 
-st.title("👤 Gender Prediction")
+st.header("Gender Prediction")
 
-code = st.number_input("Code", value=1148)
-company = st.text_input("Company", "Umbrella LTDA")
-name = st.text_input("Name", "Laurel Rodriguez")
-age = st.number_input("Age", value=45)
+API_URL = "https://voyage-analytics-xdw8.onrender.com/predict/gender"
+
+code = st.number_input("Code", value=1)
+
+company = st.text_input("Company", "Google")
+
+name = st.text_input("Name", "Aayush")
+
+age = st.number_input("Age", value=22)
 
 if st.button("Predict Gender"):
-    response = requests.post(
-        "http://127.0.0.1:8000/predict/gender",
-        json={
-            "code": int(code),
+
+        data = {
+            "code": code,
             "company": company,
             "name": name,
-            "age": int(age)
+            "age": age
         }
-    )
 
-    st.write(response.json())
+        response = requests.post(API_URL, json=data)
+
+        if response.status_code == 200:
+            st.success("Prediction Successful")
+            st.write(response.json())
+        else:
+            st.error(response.text)

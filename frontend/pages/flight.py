@@ -1,32 +1,46 @@
 import streamlit as st
 import requests
 
-st.title("✈️ Flight Price Prediction")
+st.header("Flight Prediction")
 
-travelCode = st.number_input("Travel Code", value=55700)
-userCode = st.number_input("User Code", value=543)
-from_ = st.text_input("From", "Recife (PE)")
-to = st.text_input("To", "Campo Grande (MS)")
-flightType = st.selectbox("Flight Type", ["firstClass", "economic", "premium"])
-time = st.number_input("Time", value=1.39)
-distance = st.number_input("Distance", value=535.40)
-agency = st.text_input("Agency", "Rainbow")
-date = st.date_input("Date")
+API_URL = "https://voyage-analytics-xdw8.onrender.com/predict/flight"
 
-if st.button("Predict Flight Price"):
-    response = requests.post(
-        "http://127.0.0.1:8000/predict/flight",
-        json={
-            "travelCode": int(travelCode),
-            "userCode": int(userCode),
-            "from_": from_,
-            "to": to,
-            "flightType": flightType,
-            "time": float(time),
-            "distance": float(distance),
-            "agency": agency,
-            "date": str(date)   # IMPORTANT FIX
-        }
+travelCode = st.number_input("Travel Code", value=1)
+userCode = st.number_input("User Code", value=100)
+
+from_city = st.text_input("From", "Hyderabad")
+to_city = st.text_input("To", "Delhi")
+
+flightType = st.selectbox(
+        "Flight Type",
+        ["Economic", "Business"]
     )
 
-    st.write(response.json())
+time = st.number_input("Flight Time", value=2.5)
+distance = st.number_input("Distance", value=1200.0)
+
+agency = st.text_input("Agency", "MakeMyTrip")
+
+date = st.text_input("Date (YYYY-MM-DD)", "2026-05-07")
+
+if st.button("Predict Flight"):
+
+        data = {
+            "travelCode": travelCode,
+            "userCode": userCode,
+            "from_": from_city,
+            "to": to_city,
+            "flightType": flightType,
+            "time": time,
+            "distance": distance,
+            "agency": agency,
+            "date": date
+        }
+
+        response = requests.post(API_URL, json=data)
+
+        if response.status_code == 200:
+            st.success("Prediction Successful")
+            st.write(response.json())
+        else:
+            st.error(response.text)
